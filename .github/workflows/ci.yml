@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
-        run: uv pip install --system ".[dev]"
+        run: uv pip install --system ".[prep,dev]"
       - name: Lint
         run: ruff check .
       - name: Test

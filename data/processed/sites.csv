@@ -1,0 +1,201 @@
+site_id,name,country_code,lat,lon,elevation_m,population,site_type,koppen_code,koppen,koppen_group,koppen_desc,koppen_fallback,geonameid
+gn-3946938,Azangaro,PE,-12.99751,-75.8366,3395,194,city,10,Csc,C,"Temperate, dry summer, cold summer",False,3946938
+st-vostok,Vostok Station,AQ,-78.4644,106.8372,3488,0,station,30,EF,E,"Polar, frost",False,
+st-mcmurdo,McMurdo Station,AQ,-77.8419,166.6863,10,0,station,30,EF,E,"Polar, frost",False,
+gn-2120048,Ust-Nera,RU,64.56968,143.237,492,9148,city,24,Dwd,D,"Cold, dry winter, very cold winter",False,2120048
+gn-2012874,Ytyk-Kyuyel',RU,62.36153,133.56178,169,7023,city,24,Dwd,D,"Cold, dry winter, very cold winter",False,2012874
+gn-2123628,Magadan,RU,59.56274,150.80211,71,92782,city,19,Dsc,D,"Cold, dry summer, cold summer",False,2123628
+gn-6180550,Whitehorse,CA,60.71611,-135.05375,630,28201,city,19,Dsc,D,"Cold, dry summer, cold summer",False,6180550
+gn-3413829,Reykjavik,IS,64.13548,-21.89541,37,118918,city,16,Cfc,C,"Temperate, no dry season, cold summer",False,3413829
+gn-3874787,Punta Arenas,CL,-53.16282,-70.90922,-9999,117430,city,16,Cfc,C,"Temperate, no dry season, cold summer",False,3874787
+gn-3924610,Achacachi,BO,-16.04707,-68.68534,3847,8447,city,13,Cwc,C,"Temperate, dry winter, cold summer",False,3924610
+gn-3823235,El Conejo,MX,19.5314,-97.15383,3257,1044,city,13,Cwc,C,"Temperate, dry winter, cold summer",False,3823235
+gn-2027044,Batagay,RU,67.65501,134.63821,138,4266,city,28,Dfd,D,"Cold, no dry season, very cold winter",False,2027044
+gn-2020221,Markha,RU,62.11454,129.74403,99,11648,city,28,Dfd,D,"Cold, no dry season, very cold winter",False,2020221
+gn-1281105,Yushu,CN,33.00118,97.00893,3688,141308,city,23,Dwc,D,"Cold, dry winter, cold summer",False,1281105
+gn-2031405,Erdenet,MN,49.03333,104.08333,1307,97814,city,23,Dwc,D,"Cold, dry winter, cold summer",False,2031405
+gn-3944797,Cerro de Pasco,PE,-10.66577,-76.25309,4457,58899,city,29,ET,E,"Polar, tundra",False,3944797
+gn-3928679,Sicuani,PE,-14.26944,-71.22611,3551,33575,city,29,ET,E,"Polar, tundra",False,3928679
+gn-5879400,Anchorage,US,61.21806,-149.90028,16,289600,city,18,Dsb,D,"Cold, dry summer, warm summer",True,5879400
+gn-300619,Sivas,TR,39.74833,37.01611,1287,264022,city,18,Dsb,D,"Cold, dry summer, warm summer",False,300619
+gn-1138958,Kabul,AF,34.52813,69.17233,1798,4434550,city,17,Dsa,D,"Cold, dry summer, hot summer",False,1138958
+gn-1528675,Bishkek,KG,42.87,74.59,767,900000,city,17,Dsa,D,"Cold, dry summer, hot summer",False,1528675
+gn-581049,Arkhangel'sk,RU,64.5461,40.55183,11,349742,city,27,Dfc,D,"Cold, no dry season, cold summer",False,581049
+gn-1490624,Surgut,RU,61.25757,73.41775,43,300367,city,27,Dfc,D,"Cold, no dry season, cold summer",False,1490624
+gn-12359313,Qingyang,CN,35.70976,107.64455,1427,2125400,city,22,Dwb,D,"Cold, dry winter, warm summer",False,12359313
+gn-1280737,Lhasa,CN,29.65,91.1,3651,867900,city,22,Dwb,D,"Cold, dry winter, warm summer",False,1280737
+gn-1790842,Wuzhong,CN,37.9867,106.201,1133,7202654,city,5,BWk,B,"Arid, desert, cold",False,1790842
+gn-11838258,Bayan Nur,CN,40.74143,107.38599,1041,1760000,city,5,BWk,B,"Arid, desert, cold",False,11838258
+gn-1835848,Seoul,KR,37.566,126.9784,38,10349312,city,21,Dwa,D,"Cold, dry winter, hot summer",False,1835848
+gn-2037013,Harbin,CN,45.75,126.65,140,10009854,city,21,Dwa,D,"Cold, dry winter, hot summer",False,2037013
+gn-993800,Johannesburg,ZA,-26.20227,28.04363,1767,9418183,city,12,Cwb,C,"Temperate, dry winter, warm summer",False,993800
+gn-1804651,Kunming,CN,25.03889,102.71833,1895,5950578,city,12,Cwb,C,"Temperate, dry winter, warm summer",False,1804651
+gn-3369157,Cape Town,ZA,-33.92584,18.42322,25,4772846,city,9,Csb,C,"Temperate, dry summer, warm summer",False,3369157
+gn-3652462,Quito,EC,-0.22985,-78.52495,2854,2781641,city,9,Csb,C,"Temperate, dry summer, warm summer",False,3652462
+gn-1816670,Beijing,CN,39.9075,116.39723,49,18960744,city,7,BSk,B,"Arid, steppe, cold",False,1816670
+gn-112931,Tehran,IR,35.69439,51.42151,1178,7153309,city,7,BSk,B,"Arid, steppe, cold",False,112931
+gn-1174872,Karachi,PK,24.8608,67.0104,8,11624219,city,4,BWh,B,"Arid, desert, hot",False,1174872
+gn-360630,Cairo,EG,30.06263,31.24967,23,9606916,city,4,BWh,B,"Arid, desert, hot",False,360630
+gn-1642911,Jakarta,ID,-6.21462,106.84513,16,8540121,city,1,Af,A,"Tropical, rainforest",False,1642911
+gn-1880252,Singapore,SG,1.28967,103.85007,23,5638700,city,1,Af,A,"Tropical, rainforest",False,1880252
+gn-4887398,Chicago,US,41.85003,-87.65005,180,2664452,city,25,Dfa,D,"Cold, no dry season, hot summer",False,4887398
+gn-2128295,Sapporo,JP,43.06667,141.35,26,1973832,city,25,Dfa,D,"Cold, no dry season, hot summer",False,2128295
+gn-1275339,Mumbai,IN,19.07283,72.88261,8,12691836,city,2,Am,A,"Tropical, monsoon",False,1275339
+gn-2293538,Abidjan,CI,5.35444,-4.00167,50,6321017,city,2,Am,A,"Tropical, monsoon",False,2293538
+gn-745044,Istanbul,TR,41.01384,28.94966,39,15701602,city,8,Csa,C,"Temperate, dry summer, hot summer",False,745044
+gn-5368361,Los Angeles,US,34.05223,-118.24368,96,3820914,city,8,Csa,C,"Temperate, dry summer, hot summer",False,5368361
+gn-1172451,Lahore,PK,31.558,74.35071,216,13004135,city,6,BSh,B,"Arid, steppe, hot",False,1172451
+gn-1273294,Delhi,IN,28.65195,77.23149,227,11034555,city,6,BSh,B,"Arid, steppe, hot",False,1273294
+gn-1815286,Chengdu,CN,30.66667,104.06667,499,20937757,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,1815286
+gn-1809858,Guangzhou,CN,23.11667,113.25,15,18676605,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,1809858
+gn-524901,Moscow,RU,55.75204,37.61781,155,10381222,city,26,Dfb,D,"Cold, no dry season, warm summer",False,524901
+gn-498817,Saint Petersburg,RU,59.93863,30.31413,11,5351935,city,26,Dfb,D,"Cold, no dry season, warm summer",False,498817
+gn-2643743,London,GB,51.50853,-0.12574,25,8961989,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,2643743
+gn-3688689,Bogota,CO,4.60971,-74.08175,2582,7674366,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,3688689
+gn-1796236,Shanghai,CN,31.22222,121.45806,12,24874500,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,1796236
+gn-1814906,Chongqing,CN,29.56026,106.55771,289,22000000,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,1814906
+gn-2314302,Kinshasa,CD,-4.32758,15.31357,281,16000000,city,3,Aw,A,"Tropical, savannah",False,2314302
+gn-2332459,Lagos,NG,6.45407,3.39467,11,15388000,city,3,Aw,A,"Tropical, savannah",False,2332459
+gn-2146142,Townsville,AU,-19.26639,146.80569,15,201313,city,3,Aw,A,"Tropical, savannah",False,2146142
+gn-5856195,Honolulu,US,21.30694,-157.85833,18,350964,city,3,Aw,A,"Tropical, savannah",False,5856195
+gn-3404545,Cabo de Santo Agostinho,BR,-8.28773,-35.02925,35,216969,city,3,Aw,A,"Tropical, savannah",False,3404545
+gn-54225,Marka,SO,1.71594,44.77166,12,230100,city,3,Aw,A,"Tropical, savannah",False,54225
+gn-933945,Vacoas,MU,-20.29806,57.47833,390,115289,city,2,Am,A,"Tropical, monsoon",False,933945
+gn-1626542,Sorong,ID,-0.87956,131.26104,7,219958,city,1,Af,A,"Tropical, rainforest",False,1626542
+gn-3455070,Paranagua,BR,-25.51626,-48.52537,12,150104,city,1,Af,A,"Tropical, rainforest",False,3455070
+gn-3389353,Santarem,BR,-2.44306,-54.70833,51,360871,city,2,Am,A,"Tropical, monsoon",False,3389353
+gn-3571824,Nassau,BS,25.05823,-77.34306,5,227940,city,3,Aw,A,"Tropical, savannah",False,3571824
+gn-363807,Winejok,SS,9.01222,27.57081,419,300000,city,3,Aw,A,"Tropical, savannah",False,363807
+gn-1035025,Nacala,MZ,-14.56257,40.68538,137,239808,city,3,Aw,A,"Tropical, savannah",False,1035025
+gn-1259385,Port Blair,IN,11.66613,92.74635,36,112050,city,2,Am,A,"Tropical, monsoon",False,1259385
+gn-1282027,Male,MV,4.17521,73.50916,8,103693,city,2,Am,A,"Tropical, monsoon",False,1282027
+gn-2411989,Serekunda,GM,13.43833,-16.67806,15,340000,city,3,Aw,A,"Tropical, savannah",False,2411989
+gn-1734052,Sandakan,MY,5.8402,118.1179,10,439050,city,1,Af,A,"Tropical, rainforest",True,1734052
+gn-157738,Kigoma,TZ,-4.87694,29.62667,769,232388,city,3,Aw,A,"Tropical, savannah",False,157738
+gn-1638868,Labuan Bajo,ID,-8.4964,119.8877,63,188724,city,3,Aw,A,"Tropical, savannah",False,1638868
+gn-3617723,Masaya,NI,11.97316,-86.09587,242,130113,city,3,Aw,A,"Tropical, savannah",False,3617723
+gn-4563243,Carolina,PR,18.38078,-65.95739,22,170404,city,1,Af,A,"Tropical, rainforest",False,4563243
+gn-3465038,Cuiaba,BR,-15.59611,-56.09667,193,618124,city,3,Aw,A,"Tropical, savannah",False,3465038
+gn-906054,Mongu,ZM,-15.24835,23.12741,1016,111450,city,3,Aw,A,"Tropical, savannah",False,906054
+gn-2082539,Merauke,ID,-8.49958,140.40613,8,116864,city,3,Aw,A,"Tropical, savannah",False,2082539
+gn-2228373,Maroua,CM,10.59095,14.31593,406,314122,city,3,Aw,A,"Tropical, savannah",False,2228373
+gn-1586896,Buon Ma Thuot,VN,12.66747,108.03775,459,434256,city,3,Aw,A,"Tropical, savannah",False,1586896
+gn-3625710,Upata,VE,8.0162,-62.40561,364,112617,city,3,Aw,A,"Tropical, savannah",False,3625710
+gn-1275198,Brahmapur,IN,19.31151,84.7929,37,356598,city,3,Aw,A,"Tropical, savannah",False,1275198
+gn-3388441,Sao Jose de Ribamar,BR,-2.55572,-44.05992,6,259164,city,3,Aw,A,"Tropical, savannah",False,3388441
+gn-3448519,Sao Mateus,BR,-18.72011,-39.85891,38,134423,city,1,Af,A,"Tropical, rainforest",False,3448519
+gn-2073124,Darwin,AU,-12.46113,130.84185,31,139902,city,3,Aw,A,"Tropical, savannah",False,2073124
+gn-2549979,El Kelaa des Srarhna,MA,32.05121,-7.41079,471,103982,city,6,BSh,B,"Arid, steppe, hot",False,2549979
+gn-3836669,San Rafael,AR,-34.61531,-68.33238,690,118009,city,7,BSk,B,"Arid, steppe, cold",False,3836669
+gn-6053154,Lethbridge,CA,49.69999,-112.81856,907,103197,city,7,BSk,B,"Arid, steppe, cold",False,6053154
+gn-103630,Najran,SA,17.49326,44.12766,1310,505652,city,4,BWh,B,"Arid, desert, hot",False,103630
+gn-2219936,Al Jumayl,LY,32.85286,12.0612,4,102000,city,4,BWh,B,"Arid, desert, hot",False,2219936
+gn-5525577,Lubbock,US,33.57786,-101.85517,979,249042,city,7,BSk,B,"Arid, steppe, cold",False,5525577
+gn-3985710,Cabo San Lucas,MX,22.89088,-109.91238,11,202694,city,4,BWh,B,"Arid, desert, hot",False,3985710
+gn-292968,Abu Dhabi,AE,24.45118,54.39696,6,1807000,city,4,BWh,B,"Arid, desert, hot",False,292968
+gn-610529,Atyrau,KZ,47.1048,51.88427,-19,290700,city,5,BWk,B,"Arid, desert, cold",False,610529
+gn-3347019,Mossamedes,AO,-15.19611,12.15222,13,255000,city,4,BWh,B,"Arid, desert, hot",False,3347019
+gn-2447513,Arlit,NE,18.73694,7.38528,423,106448,city,4,BWh,B,"Arid, desert, hot",False,2447513
+gn-2463447,Dakhla,EH,23.68477,-15.95798,6,106277,city,4,BWh,B,"Arid, desert, hot",False,2463447
+gn-2519752,Castello de la Plana,ES,39.98567,-0.04935,37,183711,city,7,BSk,B,"Arid, steppe, cold",False,2519752
+gn-380173,Ad-Damir,SD,17.59898,33.97205,354,103941,city,4,BWh,B,"Arid, desert, hot",False,380173
+gn-106281,Ha'il,SA,27.52188,41.69073,1002,605930,city,4,BWh,B,"Arid, desert, hot",False,106281
+gn-1055429,Toliara,MG,-23.35,43.66667,11,178725,city,6,BSh,B,"Arid, steppe, hot",False,1055429
+gn-2453348,Mopti,ML,14.4843,-4.18296,268,186187,city,6,BSh,B,"Arid, steppe, hot",False,2453348
+gn-60149,El Dibir,SO,11.76667,51.21667,48,200000,city,4,BWh,B,"Arid, desert, hot",False,60149
+gn-3352136,Windhoek,NA,-22.55941,17.08323,1656,386219,city,4,BWh,B,"Arid, desert, hot",False,3352136
+gn-1512473,Urganch,UZ,41.55177,60.63143,94,145000,city,5,BWk,B,"Arid, desert, cold",False,1512473
+gn-1522203,Kokshetau,KZ,53.28414,69.39364,231,150649,city,7,BSk,B,"Arid, steppe, cold",False,1522203
+gn-338832,Dire Dawa,ET,9.59306,41.86611,1204,343000,city,6,BSh,B,"Arid, steppe, hot",False,338832
+gn-1267648,Karur,IN,10.95771,78.08095,126,234191,city,6,BSh,B,"Arid, steppe, hot",False,1267648
+gn-1302439,Pakokku,MM,21.33489,95.08438,70,126938,city,6,BSh,B,"Arid, steppe, hot",False,1302439
+gn-3629614,Punta Cardon,VE,11.65806,-70.215,34,113999,city,6,BSh,B,"Arid, steppe, hot",False,3629614
+gn-87205,Darnah,LY,32.76704,22.63669,9,102581,city,6,BSh,B,"Arid, steppe, hot",False,87205
+gn-3899539,Antofagasta,CL,-23.65094,-70.39752,276,401096,city,5,BWk,B,"Arid, desert, cold",False,3899539
+gn-3860443,Comodoro Rivadavia,AR,-45.86256,-67.494,65,140850,city,7,BSk,B,"Arid, steppe, cold",False,3860443
+gn-5577147,Fort Collins,US,40.58526,-105.08442,1531,170924,city,7,BSk,B,"Arid, steppe, cold",False,5577147
+gn-888710,Kwekwe,ZW,-18.92809,29.81486,1203,119863,city,6,BSh,B,"Arid, steppe, hot",False,888710
+gn-1113217,Zabol,IR,31.0306,61.4949,483,121989,city,4,BWh,B,"Arid, desert, hot",False,1113217
+gn-245785,Abeche,TD,13.82916,20.8324,545,139983,city,4,BWh,B,"Arid, desert, hot",False,245785
+gn-2192362,Christchurch,NZ,-43.53333,172.63333,14,419200,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,2192362
+gn-2067119,Mandurah,AU,-32.5269,115.7217,4,107643,city,8,Csa,C,"Temperate, dry summer, hot summer",False,2067119
+gn-2165798,Geelong,AU,-38.14711,144.36069,23,282809,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,2165798
+gn-4945121,New Bedford,US,41.63526,-70.92701,15,101079,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,4945121
+gn-3191648,Rijeka,HR,45.32673,14.44241,12,107964,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,3191648
+gn-4076598,Mobile,US,30.69436,-88.04305,12,183289,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,4076598
+gn-3441894,Maldonado,UY,-34.89791,-54.95021,41,102000,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,3441894
+gn-2165087,Gold Coast,AU,-28.00029,153.43088,12,640778,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,2165087
+gn-1728930,Baguio,PH,16.41639,120.59306,1493,272714,city,12,Cwb,C,"Temperate, dry winter, warm summer",False,1728930
+gn-3161732,Bergen,NO,60.39299,5.32415,20,294029,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,3161732
+gn-4499379,Wilmington,US,34.23556,-77.94604,8,115933,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,4499379
+gn-5725846,Eugene,US,44.05207,-123.08675,132,176654,city,9,Csb,C,"Temperate, dry summer, warm summer",False,5725846
+gn-1849846,Toyohashi,JP,34.76667,137.38333,12,377453,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,1849846
+gn-3433899,Formosa,AR,-26.18489,-58.17313,67,222226,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,3433899
+gn-3095049,Koszalin,PL,54.19438,16.17222,30,107450,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,3095049
+gn-192710,Kiambu,KE,-1.17139,36.83556,1683,147870,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,192710
+gn-2267827,Funchal,PT,32.66568,-16.92547,280,105795,city,9,Csb,C,"Temperate, dry summer, warm summer",False,2267827
+gn-1863627,Ginowan,JP,26.26265,127.76147,105,100125,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,1863627
+gn-925475,Mzuzu,MW,-11.46556,34.02071,1275,249564,city,12,Cwb,C,"Temperate, dry winter, warm summer",False,925475
+gn-3119841,A Coruna,ES,43.37135,-8.396,22,250438,city,9,Csb,C,"Temperate, dry summer, warm summer",False,3119841
+gn-4683416,Corpus Christi,US,27.80058,-97.39638,8,316239,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,4683416
+gn-2185964,North Shore,NZ,-36.8,174.75,30,258697,city,15,Cfb,C,"Temperate, no dry season, warm summer",False,2185964
+gn-1671566,Nantou,TW,23.91566,120.66387,196,105682,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,1671566
+gn-1006984,East London,ZA,-33.01529,27.91162,48,478676,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,1006984
+gn-2525473,Cagliari,IT,39.23054,9.11917,41,149257,city,8,Csa,C,"Temperate, dry summer, hot summer",False,2525473
+gn-1255927,Siwan,IN,26.22096,84.35609,71,135066,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,1255927
+gn-3877949,Osorno,CL,-40.57395,-73.13348,37,135773,city,9,Csb,C,"Temperate, dry summer, warm summer",False,3877949
+gn-2996944,Lyon,FR,45.74906,4.84789,173,520774,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,2996944
+gn-2171507,Wollongong,AU,-34.424,150.89345,29,280153,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,2171507
+gn-3865086,Bahia Blanca,AR,-38.7176,-62.26545,20,299101,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,3865086
+gn-4409896,Springfield,US,37.21533,-93.29824,399,170188,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,4409896
+gn-612287,Rustavi,GE,41.56271,44.9787,345,128249,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,612287
+gn-3183719,Vlore,AL,40.4696,19.48379,58,115261,city,8,Csa,C,"Temperate, dry summer, hot summer",False,3183719
+gn-1856775,Miyakonojo,JP,31.73333,131.06667,148,161137,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,1856775
+gn-3590979,Quetzaltenango,GT,14.84462,-91.52316,2351,180706,city,12,Cwb,C,"Temperate, dry winter, warm summer",False,3590979
+gn-3979770,Zapopan,MX,20.72111,-103.38742,1565,1476491,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,3979770
+gn-1566166,Thanh Hoa,VN,19.8,105.76667,5,850000,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,1566166
+gn-3836277,Santa Fe,AR,-31.64881,-60.70868,21,391164,city,14,Cfa,C,"Temperate, no dry season, hot summer",False,3836277
+gn-1070940,Antananarivo,MG,-18.91368,47.53613,1274,1349501,city,12,Cwb,C,"Temperate, dry winter, warm summer",False,1070940
+gn-2229748,Kumbo,CM,6.2,10.66667,1687,125124,city,9,Csb,C,"Temperate, dry summer, warm summer",False,2229748
+gn-3836873,San Miguel de Tucuman,AR,-26.81601,-65.21051,440,548866,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,3836873
+gn-905395,Mufulira,ZM,-12.54982,28.24071,1285,169136,city,11,Cwa,C,"Temperate, dry winter, hot summer",False,905395
+gn-2078025,Adelaide,AU,-34.92866,138.59863,59,1469163,city,9,Csb,C,"Temperate, dry summer, warm summer",False,2078025
+gn-6324733,St. John's,CA,47.56494,-52.70931,35,110525,city,27,Dfc,D,"Cold, no dry season, cold summer",False,6324733
+gn-1498920,Mezhdurechensk,RU,53.68993,88.06221,243,101026,city,26,Dfb,D,"Cold, no dry season, warm summer",False,1498920
+gn-1497337,Norilsk,RU,69.3535,88.2027,76,140800,city,27,Dfc,D,"Cold, no dry season, cold summer",False,1497337
+gn-6183235,Winnipeg,CA,49.8844,-97.14704,245,749607,city,26,Dfb,D,"Cold, no dry season, warm summer",False,6183235
+gn-522942,Neftekamsk,RU,56.08879,54.26383,99,126805,city,26,Dfb,D,"Cold, no dry season, warm summer",False,522942
+gn-689558,Vinnytsya,UA,49.2322,28.46871,260,430091,city,26,Dfb,D,"Cold, no dry season, warm summer",False,689558
+gn-13645605,Skhidni Kvartaly,UA,48.56622,39.38256,140,102500,city,25,Dfa,D,"Cold, no dry season, hot summer",False,13645605
+gn-6137270,Saguenay,CA,48.41675,-71.06573,84,148886,city,26,Dfb,D,"Cold, no dry season, warm summer",False,6137270
+gn-5964700,Greater Sudbury,CA,46.49,-80.99001,266,166004,city,26,Dfb,D,"Cold, no dry season, warm summer",False,5964700
+gn-5935277,Dartmouth,CA,44.67134,-63.57719,35,101343,city,26,Dfb,D,"Cold, no dry season, warm summer",False,5935277
+gn-602150,Umea,SE,63.82842,20.25972,24,130224,city,26,Dfb,D,"Cold, no dry season, warm summer",False,602150
+gn-1519422,Semey,KZ,50.42064,80.25025,195,292780,city,25,Dfa,D,"Cold, no dry season, hot summer",False,1519422
+gn-6166142,Thunder Bay,CA,48.38202,-89.25018,188,108843,city,26,Dfb,D,"Cold, no dry season, warm summer",False,6166142
+gn-593116,Vilnius,LT,54.68916,25.2798,98,542366,city,26,Dfb,D,"Cold, no dry season, warm summer",False,593116
+gn-717582,Miskolc,HU,48.10327,20.77806,127,154521,city,26,Dfb,D,"Cold, no dry season, warm summer",False,717582
+gn-2686657,OErebro,SE,59.27412,15.2066,35,155989,city,26,Dfb,D,"Cold, no dry season, warm summer",False,2686657
+gn-121110,Piranshahr,IR,36.701,45.1413,1444,168393,city,17,Dsa,D,"Cold, dry summer, hot summer",False,121110
+gn-6119109,Regina,CA,50.45008,-104.6178,577,226404,city,26,Dfb,D,"Cold, no dry season, warm summer",False,6119109
+gn-610611,Aktobe,KZ,50.27969,57.20718,210,500757,city,25,Dfa,D,"Cold, no dry season, hot summer",False,610611
+gn-2044757,Chongjin,KP,41.79556,129.77583,5,327000,city,21,Dwa,D,"Cold, dry winter, hot summer",False,2044757
+gn-670474,Ploiesti,RO,44.95,26.01667,161,180540,city,25,Dfa,D,"Cold, no dry season, hot summer",False,670474
+gn-3068160,Pilsen,CZ,49.74747,13.37759,316,187863,city,26,Dfb,D,"Cold, no dry season, warm summer",False,3068160
+gn-5990579,Kelowna,CA,49.88307,-119.48568,350,144576,city,26,Dfb,D,"Cold, no dry season, warm summer",False,5990579
+gn-2110556,Yamagata,JP,38.23333,140.36667,321,248772,city,25,Dfa,D,"Cold, no dry season, hot summer",False,2110556
+gn-609655,Karagandy,KZ,49.80187,73.10211,545,497777,city,26,Dfb,D,"Cold, no dry season, warm summer",False,609655
+gn-8556295,Orleans,CA,45.45732,-75.50433,89,125937,city,26,Dfb,D,"Cold, no dry season, warm summer",False,8556295
+gn-5946768,Edmonton,CA,53.55014,-113.46871,610,1010899,city,26,Dfb,D,"Cold, no dry season, warm summer",False,5946768
+gn-3133880,Trondheim,NO,63.43049,10.39506,18,216518,city,26,Dfb,D,"Cold, no dry season, warm summer",False,3133880
+gn-1546102,Port-aux-Francais,TF,-49.34916,70.21937,11,45,city,29,ET,E,"Polar, tundra",False,1546102
+gn-3426466,Grytviken,GS,-54.28111,-36.5092,4,2,city,29,ET,E,"Polar, tundra",False,3426466
+st-ny-alesund,"Ny-Alesund, Svalbard",SJ,78.9236,11.93,8,0,station,29,ET,E,"Polar, tundra",False,
+st-rothera,Rothera Research Station,AQ,-67.5681,-68.1253,16,0,station,29,ET,E,"Polar, tundra",True,
+gn-3421319,Nuuk,GL,64.18347,-51.72157,1,14798,city,29,ET,E,"Polar, tundra",False,3421319
+st-south-pole,Amundsen-Scott South Pole Station,AQ,-89.99,0.0,2835,0,station,30,EF,E,"Polar, frost",False,
+st-summit,Summit Station,GL,72.5796,-38.4592,3216,0,station,30,EF,E,"Polar, frost",False,
+gn-3426691,Stanley,FK,-51.69382,-57.85701,28,2213,city,29,ET,E,"Polar, tundra",False,3426691
+st-concordia,Concordia Station (Dome C),AQ,-75.0999,123.3326,3233,0,station,30,EF,E,"Polar, frost",False,
+st-jungfraujoch,Jungfraujoch,CH,46.5475,7.9853,3571,0,station,29,ET,E,"Polar, tundra",False,
+gn-7626291,La Rinconada,PE,-14.63126,-69.44638,5022,29678,city,29,ET,E,"Polar, tundra",False,7626291
