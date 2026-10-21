@@ -20,6 +20,6 @@ jobs:
       - name: Install
         run: uv pip install --system ".[dev]"
       - name: Lint
-        run: ruff check src tests scripts app
+        run: ruff check .
       - name: Test
         run: pytest -q
