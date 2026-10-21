@@ -1,0 +1,19 @@
+# Environments
+.venv/
+.pyruntime/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Raw downloads (fetched by script)
+data/raw/
+data/interim/
+
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
+.streamlit/secrets.toml
