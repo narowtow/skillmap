@@ -75,3 +75,26 @@ delta_ci_high, skill, skill_ci_low, skill_ci_high`.
 
 The same columns as `skill_site.csv`, with `koppen_group` (A–E, or `ALL`) in place of `site_id`, plus `n_sites`.
 Group MAE is the equal-weight mean over sites. Bootstrap resamples the same date blocks across all sites in the group.
+
+For a group's `best_baseline`, `reference_model` names the baseline if every site chose the same one, or
+`per_site` if choices differ. All six groups are emitted; absent groups have `n_sites=0` and NaN estimates.
+
+## `data/processed/ablation_site.csv`
+
+One row per (site, split, learned model, feature group): `site_id, split, model, feature_group, mae`.
+`feature_group` is `temp_calendar` or `full`. Each feature group selects its own shared model configuration on
+the equal-weight mean site validation MAE. `full` matches the main predictions and metrics.
+
+## Evaluation details
+
+Baseline selection compares persistence and climatology on their common finite validation dates. Metrics
+drop nonfinite truth/prediction pairs; skill comparisons use common finite support for each model/reference
+pair. Thus `n` can differ by model and skill-table MAEs can differ from unpaired metric-table MAEs when data
+are missing. Missing calendar dates remain in the bootstrap sampling index. The ordinary overlapping
+moving-block bootstrap samples blocks with replacement and truncates the last block to the split's length.
+A replicate without any paired observations for one of its sites is undefined and omitted from its interval;
+skill is NaN when reference MAE is zero. Intervals are conditional on the fitted, selected models and do not
+include model-selection uncertainty. Validation results are selection diagnostics; test results are held out.
+
+When the experiment writes to `config.PROCESSED`, predictions are also copied to `config.APP_DATA`.
+Custom output directories are self-contained unless `app_out` is explicitly supplied to `run_experiment`.

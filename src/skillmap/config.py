@@ -68,3 +68,14 @@ BOOTSTRAP_BLOCK_DAYS = 14
 BOOTSTRAP_REPS = 1000
 MODELS = ["persistence", "climatology", "linear", "hgb"]
 BASELINES = ["persistence", "climatology"]
+
+# Experiment artifact schemas (column order is part of the data contract).
+PREDICTION_COLUMNS = ["site_id", "date", "split", "y_true", *MODELS]
+METRIC_COLUMNS = ["site_id", "split", "model", "mae", "rmse", "bias", "n"]
+SKILL_VALUE_COLUMNS = [
+    "reference_model", "mae_model", "mae_ref", "delta_mae", "delta_ci_low", "delta_ci_high",
+    "skill", "skill_ci_low", "skill_ci_high",
+]
+SKILL_SITE_COLUMNS = ["site_id", "split", "model", "reference", *SKILL_VALUE_COLUMNS]
+SKILL_GROUP_COLUMNS = ["koppen_group", "split", "model", "reference", *SKILL_VALUE_COLUMNS, "n_sites"]
+ABLATION_COLUMNS = ["site_id", "split", "model", "feature_group", "mae"]
