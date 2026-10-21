@@ -25,8 +25,13 @@ def main() -> None:
     sites = pd.read_csv(config.SITES_CSV, keep_default_na=False).head(48)
     if len(sites) != 48:
         parser.error("Benchmark requires at least 48 selected sites")
-    chunks = [Chunk(row.site_id, row.lat, row.lon, config.START, config.START + pd.Timedelta(days=13))
-              for row in sites.itertuples()]
+    # Each run gets its own 14-day window so no run can benefit from a server-side cache of an earlier one.
+    def batch(run: int) -> list[Chunk]:
+        start = config.START + pd.Timedelta(days=14 * run)
+        return [Chunk(row.site_id, row.lat, row.lon, start, start + pd.Timedelta(days=13))
+                for row in sites.itertuples()]
+
+    chunks = batch(0)
     print(f"Threads: 1, 2, 4, 8; requests/run: {len(chunks)}; days/request: 14")
     print(f"Total base weight: {sum(c.weight for c in chunks) * 4:.0f} (retries charged separately)")
     if args.dry_run:
@@ -37,7 +42,8 @@ def main() -> None:
     gate = PauseGate()
     records = []
     with requests.Session() as session:
-        for threads in (1, 2, 4, 8):
+        for run, threads in enumerate((1, 2, 4, 8)):
+            chunks = batch(run)
             began = time.perf_counter()
             with ThreadPoolExecutor(max_workers=threads) as executor:
                 results = list(executor.map(lambda chunk: fetch_chunk(
