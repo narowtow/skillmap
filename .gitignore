@@ -19,3 +19,4 @@ Thumbs.db
 .streamlit/secrets.toml
 *.egg-info/
 build/
+data/synthetic_run/
