@@ -17,3 +17,5 @@ Thumbs.db
 .env
 .env.*
 .streamlit/secrets.toml
+*.egg-info/
+build/
