@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/skillmap/__init__.py
+src/skillmap.egg-info/PKG-INFO
+src/skillmap.egg-info/SOURCES.txt
+src/skillmap.egg-info/dependency_links.txt
+src/skillmap.egg-info/requires.txt
+src/skillmap.egg-info/top_level.txt

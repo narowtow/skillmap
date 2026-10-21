@@ -1,0 +1,40 @@
+[project]
+name = "skillmap"
+version = "0.1.0"
+description = "Where is next-day high temperature predictable, and where does ML beat simple rules?"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "numpy>=2.2",
+    "pandas>=2.2",
+    "pyarrow>=18",
+    "scikit-learn>=1.6",
+    "requests>=2.32",
+    "plotly>=6.0",
+    "streamlit>=1.45",
+    "matplotlib>=3.10",
+]
+
+[project.optional-dependencies]
+prep = ["rasterio>=1.4"]
+dev = ["pytest>=8", "ruff>=0.11", "nbclient>=0.10", "nbformat>=5.10", "ipykernel>=6.29", "nbconvert>=7.16"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]

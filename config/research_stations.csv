@@ -1,0 +1,13 @@
+station_id,name,country_code,lat,lon,elevation_m
+summit,"Summit Station",GL,72.5796,-38.4592,3216
+south-pole,"Amundsen-Scott South Pole Station",AQ,-89.99,0.0,2835
+vostok,"Vostok Station",AQ,-78.4644,106.8372,3488
+concordia,"Concordia Station (Dome C)",AQ,-75.0999,123.3326,3233
+mcmurdo,"McMurdo Station",AQ,-77.8419,166.6863,10
+neumayer,"Neumayer Station III",AQ,-70.6667,-8.2667,40
+rothera,"Rothera Research Station",AQ,-67.5681,-68.1253,16
+eureka,"Eureka, Nunavut",CA,79.9889,-85.9408,10
+alert,"Alert, Nunavut",CA,82.5018,-62.3481,30
+ny-alesund,"Ny-Alesund, Svalbard",SJ,78.9236,11.93,8
+jungfraujoch,"Jungfraujoch",CH,46.5475,7.9853,3571
+mauna-loa,"Mauna Loa Observatory",US,19.5362,-155.5763,3397
