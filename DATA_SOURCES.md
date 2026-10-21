@@ -9,3 +9,4 @@ The code is MIT-licensed (see `LICENSE`). The data below keep their own licenses
   constrained CMIP6 projections. *Scientific Data* 10, 724 (2023). 1991–2020 map, CC BY 4.0.
 - **Places:** [GeoNames](https://www.geonames.org/) (`cities15000`, `cities500`), CC BY 4.0.
 - **Research stations:** coordinates compiled by hand from public station information (`config/research_stations.csv`).
+- **Land outline (static figures):** [Natural Earth](https://www.naturalearthdata.com/) 1:110m land, public domain (`data/external/ne_110m_land.geojson`).
