@@ -34,7 +34,7 @@ pythonpath = ["src"]
 [tool.ruff]
 line-length = 110
 target-version = "py312"
-extend-exclude = ["notebooks"]
+extend-exclude = ["notebooks", ".pyruntime", "data"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
