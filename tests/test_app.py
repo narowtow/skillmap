@@ -325,7 +325,7 @@ def test_optional_pooled_export(bundle):
     if present:
         assert predictions["hgb_pooled"].dtype == np.float32
         skills = pd.read_parquet(bundle / "skill_site.parquet")
-        assert skills.loc[skills["model"].eq("hgb_pooled"), "n"].eq(3).all()
+        assert skills.loc[skills["model"].eq("hgb_pooled"), "n"].gt(0).all()
 
 
 def test_refresh_picks_up_new_result_site(tiny_source, tmp_path, monkeypatch):

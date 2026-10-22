@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22T00:19:52.725035+00:00",
+  "generated_at": "2026-10-22T00:26:00.576252+00:00",
   "n_sites": 200,
   "n_sites_with_results": 35,
   "splits": {
@@ -20,7 +20,8 @@
     "persistence",
     "climatology",
     "linear",
-    "hgb"
+    "hgb",
+    "hgb_pooled"
   ],
   "baselines": [
     "persistence",
@@ -43,5 +44,5 @@
   ],
   "bootstrap_block_days": 14,
   "bootstrap_reps": 1000,
-  "bundle_bytes": 1007582
+  "bundle_bytes": 1297985
 }
