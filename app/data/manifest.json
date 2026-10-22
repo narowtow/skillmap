@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-10-22T00:19:52.725035+00:00",
+  "n_sites": 200,
+  "n_sites_with_results": 35,
+  "splits": {
+    "train": [
+      "2015-01-01",
+      "2021-12-31"
+    ],
+    "val": [
+      "2022-01-01",
+      "2023-12-31"
+    ],
+    "test": [
+      "2024-01-01",
+      "2025-12-31"
+    ]
+  },
+  "models": [
+    "persistence",
+    "climatology",
+    "linear",
+    "hgb"
+  ],
+  "baselines": [
+    "persistence",
+    "climatology"
+  ],
+  "data_period": [
+    "2015-01-01",
+    "2025-12-31"
+  ],
+  "prediction_period": [
+    "2022-01-01",
+    "2025-12-31"
+  ],
+  "weather_variables": [
+    "tmax",
+    "tmin",
+    "rh_mean",
+    "msl_mean",
+    "wind_mean"
+  ],
+  "bootstrap_block_days": 14,
+  "bootstrap_reps": 1000,
+  "bundle_bytes": 1007582
+}
