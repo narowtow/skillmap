@@ -24,12 +24,21 @@ def main() -> None:
     parser.add_argument("--out", type=Path, default=PROCESSED)
     parser.add_argument("--site-ids", nargs="+", help="space- or comma-separated site IDs")
     parser.add_argument("--n-jobs", type=int, default=1)
+    parser.add_argument("--pooled", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--no-app-copy", action="store_true")
+    parser.add_argument("--complete-only", action="store_true", help="select sites with >=99%% finite Tmax")
     args = parser.parse_args()
     started = perf_counter()
     sites = make_sites() if args.synthetic else pd.read_csv(args.sites, dtype={"site_id": str})
     daily = make_daily(sites) if args.synthetic else pd.read_parquet(args.daily)
     site_ids = [site_id for token in args.site_ids for site_id in token.split(",")] if args.site_ids else None
-    result = run_experiment(daily, sites, out=args.out, site_ids=site_ids, n_jobs=args.n_jobs)
+    if args.complete_only:
+        complete = daily.groupby("site_id")["tmax"].apply(lambda values: values.notna().mean() >= 0.99)
+        site_ids = [site for site in (site_ids or complete.index) if complete.get(site, False)]
+    result = run_experiment(
+        daily, sites, out=args.out, site_ids=site_ids, n_jobs=args.n_jobs,
+        pooled=args.pooled, copy_to_app=not args.no_app_copy,
+    )
     grouped = result["metrics_site"].merge(sites[["site_id", "koppen_group"]], on="site_id")
     table = grouped.groupby(["split", "koppen_group", "model"])["mae"].mean().unstack("model")
     overall = grouped.groupby(["split", "model"])["mae"].mean().unstack("model")

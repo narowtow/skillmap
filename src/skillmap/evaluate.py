@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from time import perf_counter
 from typing import Any
 
 import numpy as np
@@ -33,7 +35,7 @@ from skillmap.config import (
     SPLITS,
 )
 from skillmap.features import FEATURE_GROUPS, add_climatology_anomaly, build_features
-from skillmap.models import HGB_GRID, LINEAR_GRID, fit_predict
+from skillmap.models import HGB_GRID, LINEAR_GRID, POOLED_GRID, fit_predict, pooled_predict
 
 LEARNED_MODELS = [model for model in MODELS if model not in BASELINES]
 
@@ -96,11 +98,14 @@ def _prepare_site(table: pd.DataFrame) -> SiteFold:
     refit = pd.concat([train, val])
     climate_train = Climatology().fit(train["date"], train["y_true"])
     climate_refit = Climatology().fit(refit["date"], refit["y_true"])
+    frames = [add_climatology_anomaly(frame, climate) for frame, climate in (
+        (train, climate_train), (val, climate_train), (refit, climate_refit), (test, climate_refit)
+    )]
+    climates = (climate_train, climate_train, climate_refit, climate_refit)
+    for frame, climate in zip(frames, climates, strict=True):
+        frame["climatology_target"] = climate.predict(frame["date"])
     return SiteFold(
-        site_id, add_climatology_anomaly(train, climate_train),
-        add_climatology_anomaly(val, climate_train),
-        add_climatology_anomaly(refit, climate_refit),
-        add_climatology_anomaly(test, climate_refit),
+        site_id, *frames,
         climate_train.predict(val["date"]), climate_refit.predict(test["date"]),
     )
 
@@ -133,6 +138,7 @@ def _skill_tables(
     predictions: pd.DataFrame, sites: pd.DataFrame, reps: int, block_days: int, seed: int,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     choices = _choose_baselines(predictions)
+    models = [*MODELS, *(["hgb_pooled"] if "hgb_pooled" in predictions else [])]
     site_rows, group_rows = [], []
     for split, rows in predictions.groupby("split", sort=False):
         dates = pd.date_range(*SPLITS[split], freq="D")
@@ -144,14 +150,14 @@ def _skill_tables(
             model: (rows.pivot(index="date", columns="site_id", values=model).reindex(
                 index=dates, columns=site_ids
             ) - truth).abs().to_numpy()
-            for model in MODELS
+            for model in models
         }
         errors["best_baseline"] = np.column_stack([
             errors[choices[site_id]][:, i] for i, site_id in enumerate(site_ids)
         ])
         weights = moving_block_weights(len(dates), reps=reps, block_days=block_days, seed=seed)
         group_map = sites.set_index("site_id")["koppen_group"]
-        for model in LEARNED_MODELS:
+        for model in [name for name in models if name not in BASELINES]:
             for reference in [*BASELINES, "best_baseline"]:
                 for i, site_id in enumerate(site_ids):
                     summary = paired_bootstrap(errors[model][:, i], errors[reference][:, i], weights=weights)
@@ -184,6 +190,8 @@ def run_experiment(
     hgb_grid: Sequence[dict[str, Any]] | None = None,
     bootstrap_reps: int = BOOTSTRAP_REPS, block_days: int = BOOTSTRAP_BLOCK_DAYS, seed: int = SEED,
     app_out: str | Path | None = None,
+    pooled: bool = True, pooled_grid: Sequence[dict[str, Any]] | None = None,
+    copy_to_app: bool = True,
 ) -> dict[str, pd.DataFrame]:
     """Tune on validation, refit through validation end, then evaluate test once.
 
@@ -193,6 +201,7 @@ def run_experiment(
     predictions to APP_DATA; custom output directories are self-contained unless
     app_out is given. Grids and bootstrap reps can be reduced for fast tests.
     """
+    started = perf_counter()
     if sites["site_id"].duplicated().any():
         raise ValueError("sites must have unique site_id")
     selected_ids = list(sites["site_id"] if site_ids is None else site_ids)
@@ -204,6 +213,16 @@ def run_experiment(
         raise ValueError("selected site missing daily data")
     table = build_features(selected_daily)
     folds = [_prepare_site(rows) for _, rows in table.groupby("site_id", sort=True)]
+    if pooled:
+        descriptors = selected_sites.set_index("site_id")
+        for fold in folds:
+            site = descriptors.loc[fold.site_id]
+            for frame in (fold.train, fold.val, fold.refit, fold.test):
+                frame["lat"] = site["lat"]
+                frame["abs_lat"] = abs(site["lat"])
+                frame["elevation_m"] = site["elevation_m"]
+                # Fixed domain encoding, independent of targets and fold membership.
+                frame["koppen_category"] = list(GROUP_QUOTAS).index(site["koppen_group"])
     grids = {"linear": LINEAR_GRID if linear_grid is None else list(linear_grid),
              "hgb": HGB_GRID if hgb_grid is None else list(hgb_grid)}
     if any(not grid for grid in grids.values()):
@@ -218,11 +237,12 @@ def run_experiment(
             predictions.append(frame)
     prediction_frames = {(str(frame["site_id"].iloc[0]), str(frame["split"].iloc[0])): frame
                          for frame in predictions}
-    ablation_rows, selected_params = [], {}
+    ablation_rows, selected_params, validation_scores = [], {}, {}
     # Bound BLAS/OpenMP to one thread per fit; site-level joblib owns concurrency.
     with threadpool_limits(limits=1), Parallel(n_jobs=n_jobs, prefer="threads") as parallel:
         for feature_group, columns in FEATURE_GROUPS.items():
             selected_params[feature_group] = {}
+            validation_scores[feature_group] = {}
             for model in LEARNED_MODELS:
                 grid = grids[model]
                 candidates = parallel(delayed(_validation_candidates)(fold, columns, model, grid)
@@ -234,6 +254,10 @@ def run_experiment(
                 best = int(np.argmin(scores.mean(axis=0)))
                 params = grid[best]
                 selected_params[feature_group][model] = dict(params)
+                validation_scores[feature_group][model] = [
+                    {"params": dict(params), "mae": float(score)}
+                    for params, score in zip(grid, scores.mean(axis=0), strict=True)
+                ]
                 test_predictions = parallel(
                     delayed(fit_predict)(fold.refit, fold.test, columns, model, params) for fold in folds
                 )
@@ -246,11 +270,41 @@ def run_experiment(
                         })
                         if feature_group == "full":
                             prediction_frames[fold.site_id, split][model] = pred
-        prediction_table = pd.concat(predictions, ignore_index=True)[PREDICTION_COLUMNS]
+            if pooled:
+                grid = list(POOLED_GRID if pooled_grid is None else pooled_grid)
+                if not grid:
+                    raise ValueError("pooled grid must not be empty")
+                train, val, refit, test = [pd.concat([getattr(fold, key) for fold in folds])
+                                         for key in ("train", "val", "refit", "test")]
+                candidates = [pooled_predict(train, val, columns, params) for params in grid]
+                scores = [
+                    val.assign(pred=pred).groupby("site_id").apply(
+                        lambda rows: mae(rows["y_true"], rows["pred"]), include_groups=False
+                    ).mean() for pred in candidates
+                ]
+                best = int(np.argmin(scores))
+                selected_params[feature_group]["hgb_pooled"] = dict(grid[best])
+                validation_scores[feature_group]["hgb_pooled"] = [
+                    {"params": dict(params), "mae": float(score)}
+                    for params, score in zip(grid, scores, strict=True)
+                ]
+                test_pred = pooled_predict(refit, test, columns, grid[best])
+                for split, frame, pred in (("val", val, candidates[best]), ("test", test, test_pred)):
+                    for site_id, rows in frame.assign(pred=pred).groupby("site_id"):
+                        ablation_rows.append({
+                            "site_id": site_id, "split": split, "model": "hgb_pooled",
+                            "feature_group": feature_group, "mae": mae(rows["y_true"], rows["pred"]),
+                        })
+                        if feature_group == "full":
+                            prediction_frames[site_id, split]["hgb_pooled"] = rows["pred"].to_numpy()
+        models = [*MODELS, *(["hgb_pooled"] if pooled else [])]
+        prediction_table = pd.concat(predictions, ignore_index=True)[
+            [*PREDICTION_COLUMNS, *(["hgb_pooled"] if pooled else [])]
+        ]
         metric_rows = [
             {"site_id": site_id, "split": split, "model": model, **metrics(rows["y_true"], rows[model])}
             for (site_id, split), rows in prediction_table.groupby(["site_id", "split"])
-            for model in MODELS
+            for model in models
         ]
         site_skill, group_skill = _skill_tables(
             prediction_table, selected_sites, bootstrap_reps, block_days, seed
@@ -272,7 +326,15 @@ def run_experiment(
         for name, frame in result.items():
             if name != "predictions":
                 frame.to_csv(destination / f"{name}.csv", index=False)
-        if app_out is None and destination.resolve() == PROCESSED.resolve():
+        metadata = {
+            "selected_params": selected_params, "validation_scores": validation_scores,
+            "fit_windows": prediction_table.attrs["fit_windows"], "site_ids": sorted(selected_ids),
+            "n_sites": len(folds), "n_jobs": n_jobs, "pooled": pooled,
+            "runtime_seconds": perf_counter() - started,
+            "bootstrap_reps": bootstrap_reps, "block_days": block_days, "seed": seed,
+        }
+        (destination / "experiment.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+        if copy_to_app and app_out is None and destination.resolve() == PROCESSED.resolve():
             app_out = APP_DATA
     if app_out is not None:
         Path(app_out).mkdir(parents=True, exist_ok=True)

@@ -167,7 +167,7 @@ def experiment(tmp_path_factory):
     with pytest.MonkeyPatch.context() as patch:
         patch.setattr(evaluation, "fit_predict", recording_fit)
         result = run_experiment(
-            daily, sites, out=out, app_out=out / "app", bootstrap_reps=30,
+            daily, sites, out=out, app_out=out / "app", bootstrap_reps=30, pooled=False,
             linear_grid=[{"alpha": 1.0}, {"alpha": 100.0}],
             hgb_grid=[{"max_iter": 60, "max_leaf_nodes": 7}, {"max_iter": 100, "max_leaf_nodes": 7}],
         )
@@ -247,7 +247,7 @@ def test_shared_grid_selection_averages_sites_equally(monkeypatch):
     monkeypatch.setattr(evaluation, "fit_predict", fake_fit)
     result = run_experiment(
         daily, sites, bootstrap_reps=5, linear_grid=[{"alpha": 1}, {"alpha": 2}],
-        hgb_grid=[{"max_iter": 1}, {"max_iter": 2}], n_jobs=2,
+        hgb_grid=[{"max_iter": 1}, {"max_iter": 2}], n_jobs=2, pooled=False,
     )
     for configurations in result["predictions"].attrs["selected_params"].values():
         assert configurations == {"linear": {"alpha": 2}, "hgb": {"max_iter": 2}}

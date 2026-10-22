@@ -98,3 +98,26 @@ include model-selection uncertainty. Validation results are selection diagnostic
 
 When the experiment writes to `config.PROCESSED`, predictions are also copied to `config.APP_DATA`.
 Custom output directories are self-contained unless `app_out` is explicitly supplied to `run_experiment`.
+
+`copy_to_app=False` (`--no-app-copy`) suppresses the automatic copy when another worker owns app artifacts.
+Pooled HGB is optional (`pooled=True` by default); its predictions, metrics, skill and ablation rows follow
+the same fold and comparison rules. Its anomaly target and climatology feature use training-only harmonics
+for validation, and train∪validation harmonics for test. Köppen group uses a fixed A–E categorical encoding.
+
+## Analysis artifacts
+
+- `experiment.json`: selected parameters and all validation scores per feature group/model, actual fit windows,
+  evaluated site IDs, bootstrap settings, worker count and measured experiment runtime.
+- `drivers_site.csv`: training-only descriptors joined to each test (site, model, reference) skill row and test
+  metric. `daily_change` uses adjacent calendar dates; `anomaly_acf1` is lag-1 correlation after subtracting
+  training-fitted climatology; `seasonal_amplitude` is half its fitted annual peak-to-trough range;
+  `anomaly_sd` uses sample standard deviation. Latitude, elevation and Köppen metadata are static descriptors.
+- `driver_correlations.csv`: Spearman rho, percentile 95% CI from paired site resampling, finite-site count and
+  valid replicate count for each numeric driver and test MAE/skill comparison. Ties are ranked per replicate;
+  constant or insufficient inputs are undefined. These exploratory intervals are not multiplicity-adjusted.
+- `seasonal_group.csv`: test calendar-month and hemisphere-aware meteorological-season MAE and skill for
+  each group and `ALL`, with equal site weights on common finite model/reference support. `n_pairs` counts
+  paired site-days. Estimates are points without seasonal CIs. Equatorial sites use the northern convention.
+- `findings.json`: computed medians/IQRs, significant-site fractions, group extremes, driver correlations,
+  negative-skill sites with explicitly hypothetical driver-based explanations, ablation differences,
+  pooled/local comparisons, grid-edge diagnostics and a labeled runtime projection. Undefined values are null.
