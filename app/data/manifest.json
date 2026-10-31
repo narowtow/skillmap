@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-22T00:26:00.576252+00:00",
+  "generated_at": "2026-10-31T09:33:48.160252+00:00",
   "n_sites": 200,
-  "n_sites_with_results": 35,
+  "n_sites_with_results": 200,
   "splits": {
     "train": [
       "2015-01-01",
@@ -44,5 +44,5 @@
   ],
   "bootstrap_block_days": 14,
   "bootstrap_reps": 1000,
-  "bundle_bytes": 1297985
+  "bundle_bytes": 6984032
 }

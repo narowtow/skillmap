@@ -99,7 +99,7 @@ def main() -> None:
     ax.set(xticks=np.arange(len(names)), xticklabels=[f"{g}\n(n={counts[g]})" for g in names],
            ylabel="Test skill vs best baseline",
            title=f"Local HGB gains are largest in {best_group} and smallest in {worst_group}")
-    ax.legend()
+    ax.legend(ncols=len(models), loc="lower center")
     ax.grid(axis="y", alpha=0.2)
     save(fig, args.out, "skill_by_group.png")
 
@@ -146,7 +146,8 @@ def main() -> None:
            ylabel="Full − temperature/calendar MAE (°C)",
            title=f"Extra weather lags lower mean MAE for "
                  f"{ablation.groupby('model').delta.mean().lt(0).sum()}/{ablation.model.nunique()} models")
-    ax.text(0.01, 0.03, "Dots: sites; black diamonds: equal-site means", transform=ax.transAxes, fontsize=10)
+    ax.text(0.99, 0.03, "Dots: sites; black diamonds: equal-site means", transform=ax.transAxes,
+            fontsize=10, ha="right")
     save(fig, args.out, "ablation.png")
 
     seasonal = pd.read_csv(args.data / "seasonal_group.csv").query(

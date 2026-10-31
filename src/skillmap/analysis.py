@@ -219,6 +219,7 @@ def run_analysis(out: str | Path = PROCESSED) -> dict[str, Any]:
     top = top.sort_values("absolute_rho", ascending=False).groupby("model").head(4)
     significant_any = best.groupby("site_id")["skill_ci_low"].max().gt(0)
     runtime = experiment.get("runtime_seconds")
+    partial = len(sites) < N_SITES
     findings = _native({
         "n_sites": len(sites), "site_ids": sorted(ids), "skill_summary": summaries,
         "mae_summary": metrics.groupby("model")["mae"].agg(
@@ -232,9 +233,11 @@ def run_analysis(out: str | Path = PROCESSED) -> dict[str, Any]:
             "target_sites": N_SITES,
             "linear_site_scaling_minutes": runtime * N_SITES / len(sites) / 60 if runtime else None,
             "assumption": "Same hardware and n_jobs; linear scaling in sites is an estimate. "
-                          "Pooled fits may scale differently; verify when the full dataset arrives.",
+                          "Pooled fits may scale differently; verify when the full dataset arrives."
+                          if partial else "Measured on the full site set; no extrapolation.",
         },
-        "caveats": ["Preliminary subset; climate-group coverage may be unbalanced.",
+        "caveats": ["Preliminary subset; climate-group coverage may be unbalanced." if partial
+                    else "Sites are stratified by Koppen class, not area-weighted; not global means.",
                     "Intervals are conditional on fitted models; no model-selection uncertainty.",
                     "Exploratory driver correlations have no multiple-comparison adjustment.",
                     "Loss explanations are hypotheses, not causal conclusions.",

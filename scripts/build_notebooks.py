@@ -189,7 +189,8 @@ def main() -> None:
                 # Where ML wins, and where prediction remains difficult
 
                 All results below come from saved held-out artifacts. Site descriptors use only the
-                training period. The preliminary subset is not a globally representative climate sample.
+                training period. Sites are stratified by Köppen class, so they are not an area-weighted
+                global sample.
             """), code(SETUP), code("""
                 def figure(name):
                     display(Image(filename=str(FIGURES / name), width=900))

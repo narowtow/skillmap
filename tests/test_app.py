@@ -229,12 +229,18 @@ def test_map_control_combinations(bundle, monkeypatch):
         assert bool(app.warning) == (split == "val")
 
 
-@pytest.mark.parametrize("theme", ["light", "dark"])
-def test_map_theme_backgrounds(theme, monkeypatch):
+@pytest.mark.parametrize(("base", "browser", "theme"), [
+    (None, "light", "light"), (None, "dark", "dark"), ("light", "dark", "light"),
+])
+def test_map_theme_backgrounds(base, browser, theme, monkeypatch):
+    import streamlit
     from streamlit.runtime.context import ContextProxy, StreamlitTheme
 
+    get_option = streamlit.get_option
+    monkeypatch.setattr(streamlit, "get_option",
+                        lambda key: base if key == "theme.base" else get_option(key))
     monkeypatch.setenv("SKILLMAP_APP_DATA", str(ROOT / "app/data"))
-    monkeypatch.setattr(ContextProxy, "theme", property(lambda _: StreamlitTheme({"type": theme})))
+    monkeypatch.setattr(ContextProxy, "theme", property(lambda _: StreamlitTheme({"type": browser})))
     app = run_ok(AppTest.from_file(str(APP)))
     figure = json.loads(app.get("plotly_chart")[0].proto.spec)
     geo, palette = figure["layout"]["geo"], map_palette(theme)

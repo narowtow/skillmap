@@ -51,6 +51,11 @@ def table(name: str) -> pd.DataFrame:
     return load_table(str(DATA), name, path.stat().st_mtime_ns)
 
 
+def theme_type() -> str | None:
+    """Configured base theme if pinned, else the browser's reported theme."""
+    return st.get_option("theme.base") or st.context.theme.type
+
+
 def chart(figure: go.Figure, key: str) -> None:
     """Apply a theme-aware, restrained chart style."""
     is_map = key == "world_map"
@@ -88,7 +93,7 @@ def show_map(sites: pd.DataFrame, model: str, reference: str, split: str) -> Non
     color_limit = skill_color_limit(selection(table("skill_site"), split, reference)["skill"])
     finite["color_value"] = finite[value] if raw else finite[value].clip(-color_limit, color_limit)
     figure = go.Figure()
-    palette = map_palette(st.context.theme.type)
+    palette = map_palette(theme_type())
     if len(finite):
         points = px.scatter_geo(
             finite, lat="lat", lon="lon", color="color_value", symbol="evidence",
@@ -189,7 +194,7 @@ def show_city(sites: pd.DataFrame, manifest: dict) -> None:
                 dict(count=3, label="3M", step="month", stepmode="backward"),
                 dict(count=1, label="1Y", step="year", stepmode="backward"),
                 dict(label="All", step="all"),
-            ], bgcolor=map_palette(st.context.theme.type)["land"]),
+            ], bgcolor=map_palette(theme_type())["land"]),
         )
         chart(figure, "city_forecasts")
     st.subheader("Test metrics · all models")
@@ -367,8 +372,9 @@ def show_method(sites: pd.DataFrame, manifest: dict) -> None:
     st.write("ERA5 reanalysis is not station truth. This is a retrospective experiment: ERA5 has an "
              "approximately five-day delay, so these results are not an operational forecast. The grid is "
              "roughly 25 km, which smooths terrain and coastal differences. Rare classes have modest "
-             "samples: Dsd is missing and Csc has one site. Preliminary coverage may be unrepresentative; "
-             "pending sites contribute no result estimates. Bootstrap intervals do not remove these limits.")
+             "samples: Dsd is missing and Csc has one site. Sites are stratified by climate class, not by "
+             "area or population, so group averages are not global averages. Bootstrap intervals do not "
+             "remove these limits.")
     st.subheader("Download concurrency benchmark")
     st.dataframe(table("benchmark_concurrency"), hide_index=True, width="stretch")
     st.caption("Measured download timings for the request batch shown; speedups are relative to one thread. "
@@ -418,6 +424,7 @@ def main() -> None:
                        if name not in manifest["baselines"]]
             model = st.sidebar.selectbox(
                 "Model", learned, format_func=model_label, key="model",
+                index=learned.index("hgb") if "hgb" in learned else 0,
             )
         if page == "Map":
             show_map(sites, model, reference, split)
