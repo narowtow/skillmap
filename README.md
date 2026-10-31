@@ -2,6 +2,8 @@
 
 **Where in the world is weather predictable, and where does machine learning actually beat simple rules?**
 
+**Live app:** [skillmap-weather.streamlit.app](https://skillmap-weather.streamlit.app)
+
 Skillmap forecasts tomorrow's high temperature (Tmax) at 200 sites spread across 29 of the 30 Köppen climate
 classes, using 11 years of daily ERA5 data (2015–2025). Two simple rules serve as baselines:
 
