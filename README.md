@@ -1,109 +1,237 @@
 # Skillmap
 
-Where in the world is weather predictable, and where does machine learning actually beat simple rules?
+**Where in the world is weather predictable, and where does machine learning actually beat simple rules?**
 
-Skillmap forecasts next-day high temperature for a sample of cities across all Köppen climate zones and compares
-linear and gradient-boosting models against persistence and climatology baselines, using time-based splits only.
+Skillmap forecasts tomorrow's high temperature (Tmax) at 200 sites spread across 29 of the 30 Köppen climate
+classes, using 11 years of daily ERA5 data (2015–2025). Two simple rules serve as baselines:
 
-Work in progress.
+- **Persistence:** tomorrow equals today.
+- **Climatology:** the seasonal average for that date.
 
-## Data pipeline
+These are compared with three models: per-site ridge regression, per-site gradient boosting, and one gradient
+boosting model pooled across all sites. Every model is scored on 2024–2025, two held-out years it never saw
+during training or tuning.
 
-The data pipeline uses local GeoNames dumps, the Beck et al. (2023) 1991–2020 Köppen raster and legend,
-and `config/research_stations.csv`. Shared settings and output schemas are in
-`src/skillmap/config.py` and `contracts/README.md`.
+Short answer:
 
-```powershell
-.venv/Scripts/python.exe -m scripts.build_sites
-.venv/Scripts/python.exe -m scripts.download --dry-run
-.venv/Scripts/python.exe -m scripts.download --sites 5 --budget 750 --max-workers 4
-.venv/Scripts/python.exe -m scripts.build_dataset
-.venv/Scripts/python.exe -m scripts.benchmark_concurrency --dry-run
+- **Machine learning beats the better simple rule almost everywhere, but only by about 10%.**
+- **Persistence is a much harder baseline than climatology.** Comparing against climatology alone would make
+  ML look three times as useful.
+- **Predictability varies about tenfold**, from 0.3 °C typical error in tropical island climates to 3.4 °C on
+  the Canadian prairies.
+
+![Gradient-boosting skill at each site](reports/figures/skill_map.png)
+
+## Findings
+
+All numbers below come from [`findings.json`](data/processed/findings.json),
+[`skill_site.csv`](data/processed/skill_site.csv) and [`skill_group.csv`](data/processed/skill_group.csv),
+for the 2024–2025 test period. MAE is mean absolute error in °C.
+
+Skill is `1 − MAE_model / MAE_baseline`; 10% means the model's typical error is 10% smaller. The baseline is
+the better of persistence and climatology, chosen per site using only the 2022–2023 validation years.
+
+**1. ML wins at almost every site, by a modest margin.**
+
+| Model | Median skill (IQR) | Sites with 95% CI above zero | Mean test MAE |
+|---|---:|---:|---:|
+| Ridge regression | 10.3% (7.0–12.6%) | 191/200 | 1.667 °C |
+| Gradient boosting (HGB), per site | 10.7% (7.8–14.2%) | 191/200 | 1.641 °C |
+| Gradient boosting, pooled across sites | 10.0% (8.0–13.0%) | 190/200 | 1.653 °C |
+| *Persistence* | | | *1.860 °C* |
+| *Climatology* | | | *2.554 °C* |
+
+No model is significantly worse than the baseline at any site. Only one site has negative point skill for
+HGB: Darnah, Libya, at −2.2% (95% CI −9.4% to +4.0%), which is within noise.
+
+**2. Persistence is the baseline to beat.**
+
+- Persistence has lower test MAE than climatology at 189 of 200 sites, and was selected on validation at 186.
+- Against climatology alone, HGB's median skill would be 33.8%, more than three times the honest figure.
+- Most of the "easy" improvement comes from simply using yesterday's temperature.
+
+**3. Predictability varies about tenfold.**
+
+![HGB test MAE at each site](reports/figures/mae_map.png)
+
+- Most predictable: tropical maritime sites, e.g. Port Blair (Am, HGB MAE 0.30 °C) and Malé (Am, 0.31 °C).
+- Least predictable: mid-latitude continental interiors, e.g. Regina (Dfb, 3.44 °C), Lethbridge (BSk,
+  3.41 °C) and Edmonton (Dfb, 3.17 °C).
+
+**4. Where ML helps most depends on how you measure.**
+
+![Skill by climate group](reports/figures/skill_by_group.png)
+
+| Climate group | Sites | Best-baseline MAE | HGB MAE | HGB skill (95% CI) |
+|---|---:|---:|---:|---:|
+| A tropical | 35 | 0.95 °C | 0.83 °C | 13.1% (12.2–14.0%) |
+| B arid | 40 | 1.76 °C | 1.56 °C | 11.6% (10.6–12.4%) |
+| C temperate | 60 | 1.82 °C | 1.59 °C | 12.8% (12.0–13.5%) |
+| D continental | 50 | 2.59 °C | 2.32 °C | 10.5% (9.6–11.3%) |
+| E polar | 15 | 1.89 °C | 1.71 °C | 9.6% (8.5–10.8%) |
+
+- In relative terms, ML gains most in tropical (A) and temperate (C) climates.
+- In absolute terms, continental (D) climates gain most: 0.27 °C versus 0.12 °C for tropical.
+- Group values weight sites equally. Intervals resample the same date blocks across all sites in a group.
+
+**5. The strongest driver of ML gain is how persistent temperature anomalies are.**
+
+![Skill against site descriptors](reports/figures/skill_vs_driver.png)
+
+- The site's lag-1 autocorrelation of temperature anomalies, measured on training years, has a Spearman
+  correlation with HGB skill of ρ = −0.63 (site-bootstrap 95% CI −0.71 to −0.54).
+- Where today's departure from normal tends to carry over to tomorrow, persistence is already good and leaves
+  little room. Where anomalies flip quickly, lagged weather variables add more.
+- Seasonal range (ρ = −0.23) and absolute latitude (ρ = −0.21) are weaker.
+- These are exploratory associations with no multiple-testing adjustment, not causal effects.
+
+**6. Model complexity matters less than inputs.**
+
+- **HGB vs ridge:** HGB beats ridge at 132 of 200 sites, but mean MAE differs by only 0.026 °C.
+- **Pooled model:** pooling all sites into one gradient-boosting model, with site descriptors, did not help.
+  It beats the per-site model at 73 of 200 sites and is 0.012 °C worse on average.
+- **Extra weather inputs:** adding humidity, pressure and wind lags to temperature and calendar features lowers
+  mean MAE for every model: by 0.080 °C for HGB, 0.060 °C for ridge and 0.052 °C for pooled HGB
+  ([ablation figure](reports/figures/ablation.png)).
+
+More figures: [seasonal skill](reports/figures/seasonal.png), [per-site MAE against
+baseline](reports/figures/baseline_vs_model.png), and [example forecasts at the best and worst
+sites](reports/figures/example_city.png). The three [executed notebooks](notebooks/) walk through the data,
+the models and the geographic comparison.
+
+## Method
+
+**Sites.**
+
+- 200 sites are sampled from GeoNames cities and 12 candidate research stations, stratified by the Beck et al.
+  (2023) 1 km Köppen–Geiger map for 1991–2020. Quotas: A 35, B 40, C 60, D 50, E 15.
+- Every class with candidates gets at least two sites. Csc has only one candidate, and Dsd has none.
+- Remaining slots go to geographically spread sites, at least 250 km apart (relaxed only where needed). Each
+  site gets its own ERA5 grid cell, with at most 12 per country.
+- The result: 192 cities and 8 research stations (including Vostok, South Pole and Summit, Greenland) in 92
+  countries.
+
+**Data.**
+
+- Daily maximum and minimum temperature, mean relative humidity, mean sea-level pressure and mean 10 m wind
+  speed from the Open-Meteo archive API (ERA5).
+- Dates are local calendar days, 2015-01-01 to 2025-12-31: 803,600 site-days with no missing values.
+
+**Forecast timing (no leakage).**
+
+- Predictors for target date *d* use data from *d − 1* or earlier, plus the calendar day of *d*.
+- Features: lags 1–7 of all five variables, pressure tendency, yesterday's daily temperature range,
+  day-of-year terms, and yesterday's Tmax anomaly.
+- Climatology (three annual harmonics), imputers and scalers are fit only on the training rows of each fold.
+
+**Splits.** Splits are chronological and shared by all sites.
+
+| Split | Years | Use |
+|---|---|---|
+| Train | 2015–2021 | Fit models |
+| Validation | 2022–2023 | Pick hyperparameters and each site's baseline |
+| Test | 2024–2025 | Refit on train + validation, then evaluate once |
+
+**Models.**
+
+- Ridge regression and scikit-learn's `HistGradientBoostingRegressor` with absolute-error loss.
+- Hyperparameters are shared across sites and chosen on mean validation MAE:
+  - Ridge: alpha 10.
+  - Per-site HGB: 400 iterations, 7 leaves.
+  - Pooled HGB: 400 iterations, 15 leaves. It predicts the anomaly from climatology and adds site latitude,
+    elevation, Köppen group and the climatological value as features.
+- All three selections sit on a grid edge (ridge's upper alpha, HGB's lower leaf count, pooled's upper
+  iteration count). The validation differences are small: ridge's MAE changes by 0.0015 °C across a
+  10,000-fold alpha range.
+
+**Uncertainty.**
+
+- Paired moving-block bootstrap over dates: 14-day blocks, 1,000 replicates.
+- Model and baseline errors are resampled together, so intervals reflect the difference between them.
+- Intervals are conditional on the selected models and do not include model-selection uncertainty.
+
+The full specification is in the [data contract](contracts/README.md).
+
+## Concurrent download
+
+Each site-year is one request, but Open-Meteo counts it as about 13 weighted calls (5 variables × 365 days).
+The 2,200 site-years (200 sites × 11 years) therefore come to roughly 28,700 weighted calls, against a
+free-tier limit of 10,000 per day.
+
+The downloader in [`fetch.py`](src/skillmap/fetch.py) works within those limits:
+
+- A thread pool shares one rate limiter with sliding minute, hour and day windows, set below the free-tier limits.
+- A rate-limit (HTTP 429) response pauses every thread at once.
+- Downloads go to a resumable on-disk cache with atomic writes.
+- A ledger of completed chunks restores the rate windows after a restart.
+
+The full download ran over several days and resumed cleanly after interruptions. A one-time benchmark of
+48 fresh requests measured:
+
+| Threads | Seconds | Speedup |
+|---:|---:|---:|
+| 1 | 10.42 | 1.0× |
+| 2 | 4.74 | 2.2× |
+| 4 | 2.56 | 4.1× |
+| 8 | 1.47 | 7.1× |
+
+The production run used 4 threads, because the daily limit, not latency, sets the overall pace.
+
+## Limitations
+
+- **ERA5 is reanalysis, not station observations.** Its ~25 km grid smooths mountains and coastlines, so
+  errors here are not what a thermometer at the city would show.
+- **This is a retrospective study, not an operational forecast.** ERA5 arrives about five days late, and real
+  forecasts use numerical weather prediction, which these models do not try to replace.
+- **Sites are stratified by climate class**, not by area or population. "ALL" averages describe this sample,
+  not the globe. Rare classes are thin (Csc has one site), and Dsd is absent.
+- **Daily inputs only.** Sub-daily or upper-air data, which real forecasters use, could change the
+  results.
+- **Only two test years** (2024–2025). Skill may differ in other years.
+- **Driver analysis is exploratory.** The listed explanations for weak sites are hypotheses.
+
+## Reproduce
+
+Requires Python 3.12+. Network access is needed only for the download step.
+
+```bash
+uv venv && uv pip install ".[prep,dev]"
+python -m scripts.build_sites        # needs GeoNames and Köppen files in data/raw/ (see DATA_SOURCES.md)
+python -m scripts.download           # resumable; about 4 days at the default daily cap
+python -m scripts.build_dataset
+SKIP_INPUTS=1 bash scripts/run_all.sh   # experiment, analysis, figures, app data, notebooks
 ```
 
-`build_sites` samples local raster cells and permits a nearest classified cell within 5 km only for coastal
-NoData. Selection covers rare classes first, then fills group quotas using geographic spread, preferring
-cities with at least 100,000 residents. ERA5 cell uniqueness is mandatory. Separation relaxes from the
-configured threshold through 100, 25, and 0 km only when necessary; country caps can relax for class coverage.
-Unfilled group quotas are redistributed. The coverage CSV reports gaps without changing any classifications.
+The full experiment took 27.2 minutes with 8 parallel jobs. Every step after the download also runs on
+synthetic data, with no network access:
 
-The generated sample contains 200 sites (A: 35, B: 40, C: 60, D: 50, E: 15). Csc has one candidate and one
-selected site; Dsd has no candidates. The build required two spacing relaxations and no country-cap relaxations.
-
-The downloader defaults to complete site histories first, interleaving climate groups in the site order.
-Use `--order year-major` for earliest years across sites, or `--site-ids gn-123 st-summit` to choose sites.
-Valid caches are skipped; missing or invalid chunks are fetched again. Every HTTP attempt, including retries,
-counts toward `--budget` and the shared sliding-window limits. A 429 pauses all workers. Ledger timestamps and
-weights seed subsequent runs, conservatively placing a chunk's retry usage at its final timestamp. Run only one
-downloader process per cache; threads within that process share all accounting. An abrupt process termination
-before journaling cannot be recovered from the ledger.
-
-`build_dataset` keeps partially downloaded sites on the complete study-date index, filling absent days with NaN,
-and warns about skipped sites with no valid chunks. API metadata comes from the earliest valid chunk, with a
-warning if later years differ. The concurrency benchmark performs real requests only without `--dry-run`;
-it uses no cache, shares rate limits across runs, and writes measured timings to `reports/benchmark_concurrency.csv`.
-
-## Experiment
-
-Run the chronological evaluation without downloaded data:
-
-```powershell
-.venv/Scripts/python.exe scripts/run_experiment.py --synthetic --out data/synthetic_run
+```bash
+python scripts/run_experiment.py --synthetic --out data/synthetic_run
 ```
 
-Omit `--synthetic` to read `config.DAILY_PARQUET` and `config.SITES_CSV`. Use `--daily`, `--sites`,
-`--out`, `--site-ids`, and `--n-jobs` to override inputs, destination, site selection, and site concurrency.
-The runner writes predictions, site metrics, paired site/group skill intervals, and feature ablations.
-See [the data contract](contracts/README.md) for schemas and missing-data semantics.
+The app reads only the small exported Parquet files in `app/data/`:
 
-The optional pooled HGB is enabled by default (`--pooled` / `--no-pooled`). It learns anomalies across
-sites using lagged weather, site descriptors, categorical Köppen group and fold-fitted climatology.
-Each local and pooled feature variant tunes its own shared configuration on equal-weight site validation MAE.
-`experiment.json` records all candidate scores, selected parameters, fit windows and measured runtime.
-
-For an offline rerun on complete histories, including the current partially downloaded dataset:
-
-```powershell
-.venv/Scripts/python.exe -m scripts.run_experiment --complete-only --pooled --n-jobs 8 --no-app-copy
-.venv/Scripts/python.exe -m scripts.analysis
-.venv/Scripts/python.exe -m scripts.make_figures
-.venv/Scripts/python.exe -m scripts.execute_notebooks
+```bash
+streamlit run app/streamlit_app.py
 ```
 
-`scripts/run_all.sh` documents the complete pipeline, including the app worker's `export_app_data` step.
-`SKIP_INPUTS=1` skips site building, network downloads and dataset building. Notebooks read processed outputs;
-they do not rerun the full experiment. `scripts/build_notebooks.py` regenerates their unexecuted sources.
+Tests and lint run with `bash scripts/check.sh` (ruff and 75 pytest tests, including headless Streamlit
+`AppTest` runs). CI runs them on Python 3.12 and 3.14.
 
-## Preliminary held-out results
+## Layout
 
-This run uses 35 sites with at least 99% nonmissing Tmax, seven per climate group. Train is 2015–2021,
-validation is 2022–2023, and test is 2024–2025. These numbers come from
-[`findings.json`](data/processed/findings.json); they describe this subset, not the complete sampling frame.
+```
+src/skillmap/   config, sites, fetch, dataset, features, baselines, models, evaluate, bootstrap, analysis
+scripts/        command-line steps (build_sites, download, build_dataset, run_experiment, analysis, ...)
+app/            Streamlit app and exported data
+data/processed/ sites, daily table, predictions, metrics, skill tables, findings
+notebooks/      executed analysis notebooks
+reports/        figures and the concurrency benchmark
+contracts/      data contract: file formats, timing rule, split semantics
+```
 
-| Model | Median skill vs best baseline (IQR) | Sites with 95% skill CI above zero |
-|---|---:|---:|
-| Ridge | 9.0% (6.8–11.7%) | 32/35 (91.4%) |
-| Local HGB | 9.2% (6.7–11.7%) | 34/35 (97.1%) |
-| Pooled HGB | 9.4% (7.2–11.0%) | 33/35 (94.3%) |
+## Data and license
 
-The best baseline is selected per site using validation only. All three models have positive point skill
-at every evaluated site. Pooled HGB's mean test MAE is 1.5696 °C versus 1.5692 °C locally; pooling improves
-18/35 sites. Adding humidity, pressure and wind lags lowers mean MAE by 0.0495 °C for local HGB,
-0.0328 °C for pooled HGB and 0.0382 °C for ridge, relative to temperature/calendar variants.
-
-Local HGB's group skill is largest in A (12.2%) and smallest in D (6.2%). Its strongest training-driver
-association is anomaly lag-1 autocorrelation: Spearman ρ = −0.78 (site-bootstrap 95% CI −0.88 to −0.58).
-Higher persistence leaves less room to improve on yesterday's temperature. This is an exploratory
-association, not an independent causal effect; driver intervals have no multiple-testing adjustment.
-
-![Local HGB skill across evaluated sites](reports/figures/skill_map.png)
-
-The full-feature ridge selects alpha 0.01, inside the extended grid. Full-feature local HGB selects
-700 iterations (upper edge) and seven leaves (lower edge); pooled HGB selects 400 iterations (upper edge).
-The temperature/calendar variant selects ridge alpha 0.001 and local HGB 200 iterations, both lower edges.
-The grids are kept fixed despite these boundary choices.
-
-The measured experiment took 4.74 minutes with eight jobs. Linear scaling in site count projects 27.1 minutes
-for 200 sites on the same hardware; the full run has not been benchmarked and pooled fitting may scale
-differently. Forecast intervals use paired moving blocks of dates and condition on model selection.
-All three [executed notebooks](notebooks/) explain coverage, timing, uncertainty and geographic comparisons.
+Code is MIT-licensed. Weather data by [Open-Meteo.com](https://open-meteo.com/) (ERA5, Copernicus/ECMWF),
+CC BY 4.0. Köppen–Geiger classes from Beck et al. (2023), CC BY 4.0. Places from GeoNames, CC BY 4.0. Full
+attribution is in [DATA_SOURCES.md](DATA_SOURCES.md).

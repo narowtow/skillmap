@@ -9,8 +9,9 @@ Run from the repository root, without downloading or training anything:
 
 The same export command refreshes the bundle when the full experiment finishes. The app imports no
 research modules and uses only the five packages pinned in `app/requirements.txt` plus the standard library.
-For Streamlit Community Cloud, select `app/streamlit_app.py` as the entrypoint. The repository theme leaves
-the light/dark base to the viewer's preference.
+For Streamlit Community Cloud, select `app/streamlit_app.py` as the entrypoint. The theme is pinned to the
+light base, and map colors follow the configured base rather than the browser's preference, so a viewer in
+dark mode does not get a dark map on a light page.
 
 The exporter reads the contract tables from `data/processed/` and the measured concurrency benchmark from
 `reports/benchmark_concurrency.csv`. It writes Zstandard-compressed Parquet tables and `manifest.json` to
@@ -19,10 +20,8 @@ downcasts floating-point values to float32, and adds paired valid-day counts to 
 Neither source artifacts nor model fits are modified. The manifest copies study settings from
 `src/skillmap/config.py` and records the export timestamp, coverage and measured bundle size.
 
-The preliminary export measured **1,007,582 bytes (1.008 MB)** for **35 of 200 sites with results**.
-Multiplying that whole bundle by 200/35 gives **5.758 MB** at 200 result sites. This is an estimate, not a
-measured full-run size; compression and missing data may change it. The exporter prints updated measured
-sizes after every run.
+The full export measured **6,984,032 bytes (6.98 MB)** for **200 of 200 sites with results**. The exporter
+prints the measured size after every run.
 
 Set `SKILLMAP_APP_DATA` to read a different exported directory. Each table is cached independently and
 its modification time invalidates the cache on replacement. Predictions are loaded only for the city view.
@@ -38,7 +37,7 @@ paired sites, with both an equal-site mean and the distribution of site differen
 The map uses Plotly's natural-earth projection with built-in filled land, ocean, coastlines and subtle
 country borders. Plotly fetches its world topojson from its CDN in the viewer's browser. Python reads
 only precomputed local artifacts, and tests do not request the CDN. Land and ocean colors follow the
-active light/dark theme; paper and geo backgrounds are transparent. Scroll-wheel zoom is disabled,
+configured base theme (or the browser's theme when no base is pinned); paper and geo backgrounds are transparent. Scroll-wheel zoom is disabled,
 while the zoom/pan toolbar remains available. The initial map extent covers the whole world with minimal
 margins. There is no graticule; pending sites use faint dots and result points have a thin dark outline.
 The symmetric color limit is the rounded 95th percentile
