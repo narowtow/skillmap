@@ -20,7 +20,7 @@ downcasts floating-point values to float32, and adds paired valid-day counts to 
 Neither source artifacts nor model fits are modified. The manifest copies study settings from
 `src/skillmap/config.py` and records the export timestamp, coverage and measured bundle size.
 
-The full export measured **6983984 bytes (6.98 MB)** for **200 of 200 sites with results**. The exporter
+The full export measured **6,983,984 bytes (6.98 MB)** for **200 of 200 sites with results**. The exporter
 prints the measured size after every run.
 
 Set `SKILLMAP_APP_DATA` to read a different exported directory. Each table is cached independently and
