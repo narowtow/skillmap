@@ -96,7 +96,7 @@ def export_app_data(
     manifest_path = destination / "manifest.json"
     manifest["bundle_bytes"] = bundle_bytes
     for _ in range(5):
-        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
         measured = bundle_bytes + manifest_path.stat().st_size
         if measured == manifest["bundle_bytes"]:
             break

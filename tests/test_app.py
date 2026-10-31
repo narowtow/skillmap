@@ -153,7 +153,7 @@ def test_export_contract_and_size(tiny_source, tmp_path):
     assert len(pd.read_parquet(destination / "benchmark_concurrency.parquet")) == 2
 
 
-def test_preliminary_bundle_is_small():
+def test_bundle_is_small():
     manifest = json.loads((ROOT / "app/data/manifest.json").read_text())
     measured = sum(path.stat().st_size for path in (ROOT / "app/data").iterdir() if path.is_file())
     assert measured == manifest["bundle_bytes"]
